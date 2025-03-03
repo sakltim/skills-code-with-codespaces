@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "NfLvg4EO8Rc=",
+  "success": true,
+  "projectFilePath": "E:\\SAK\\LTIMindTree\\Courses\\ReactDotnetBlogApp\\react-dotnet-blog-app\\react-dotnet-blog-app\\webAPI\\webAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sakut\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.2\\microsoft.aspnetcore.openapi.9.0.2.nupkg.sha512",
+    "C:\\Users\\sakut\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
