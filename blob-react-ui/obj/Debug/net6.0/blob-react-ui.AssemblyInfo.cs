@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("blob-react-ui")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a2f6c94bb5def6a2a587d4c2cde3d8dc8dbfb0fa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+355ea9c943027fb96979dd7e36832b04f79396c7")]
 [assembly: System.Reflection.AssemblyProductAttribute("blob-react-ui")]
 [assembly: System.Reflection.AssemblyTitleAttribute("blob-react-ui")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
