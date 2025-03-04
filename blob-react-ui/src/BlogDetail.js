@@ -57,6 +57,16 @@ function BlogDetail() {
     setShowModal(false);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
   return (
     <div className="blog-detail">
       <div className="title-box">
@@ -74,11 +84,12 @@ function BlogDetail() {
           comments.map(comment => {
             const user = users.find(user => user.username === comment.username);
             const fullName = user ? `${user.firstName} ${user.lastName}` : comment.username;
+            const formattedTime = formatDate(comment.submittedTime);
             return (
               <div key={comment.id} className="comment-box">
                 <div className="comment-title">
                   <span className="comment-username">{fullName}</span>
-                  <span className="comment-time">{comment.submittedTime}</span>
+                  <span className="comment-time">{formattedTime}</span>
                 </div>
                 <div className="comment-text">{comment.comment}</div>
               </div>
