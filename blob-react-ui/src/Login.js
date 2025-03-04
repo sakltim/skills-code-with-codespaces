@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Login.module.css';
+import { users } from './userData';
 
 function Login({ onLogin }) {
   const [loginButtonText, setLoginButtonText] = useState('Login');
@@ -15,8 +16,12 @@ function Login({ onLogin }) {
   console.log('Login Component Rendered');
 
   useEffect(() => {
-    console.log('Navigate function updated');
-  }, [navigate]);
+    const loggedInUser = localStorage.getItem('username');
+    if (loggedInUser) {
+      onLogin(loggedInUser);
+      navigate('/BlogCards');
+    }
+  }, [navigate, onLogin]);
 
   const isFormValid = username && password;
 
@@ -29,12 +34,13 @@ function Login({ onLogin }) {
       console.log('setIsBouncing false');
       setIsBouncing(false);
       if (isFormValid) {
-        // alert(`Username: ${username}, Password: ${password}`);
         console.log('Before Navigation');
-        if (username === 'a' && password === 'a') {
+        const user = users.find(user => user.username === username && user.password === password);
+        if (user) {
           setUsername('');
           setPassword('');
           onLogin(username);
+          localStorage.setItem('username', username);
           navigate('/BlogCards');
           console.log('After Navigation');
         } else {
@@ -46,7 +52,7 @@ function Login({ onLogin }) {
           setTimeout(() => {
             setIsBuzzing(false);
             setLoginButtonText('Login');
-            setButtonClass(classes['button-green']);
+            setButtonClass(classes['button-blue']);
           }, 1000);
         }
       }
@@ -78,7 +84,7 @@ function Login({ onLogin }) {
             <button
               type="submit"
               disabled={buttonDisable}
-              className={`${isFormValid && !isRedButtonValid ? `${classes['button-visible']} ${classes['button-green']}` : ''} ${isBouncing ? classes['button-bounce'] : ''} ${isBuzzing ? classes['button-buzz'] : ''} ${buttonClass}`}
+              className={`${isFormValid && !isRedButtonValid ? `${classes['button-visible']} ${classes['button-blue']}` : ''} ${isBouncing ? classes['button-bounce'] : ''} ${isBuzzing ? classes['button-buzz'] : ''} ${buttonClass}`}
               onClick={handleLogin}>
               {loginButtonText}
             </button>

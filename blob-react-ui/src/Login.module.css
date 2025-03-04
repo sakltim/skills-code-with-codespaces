@@ -13,11 +13,14 @@
 }
 
 .login-header {
-    background-color: #555; /* Dark gray color */
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
+
+    background-color: #4267B2; /* Facebook blue */
+    padding: 15px;
+    border-radius: 8px;
+    border-bottom: 1px solid #365899; /* Darker Facebook blue */
+    font-size: 1.5em;
+    margin: 10px 10px 25px 10px;
+    color: #ffffff; /* White text */
 }
 
 .login-box {
@@ -54,6 +57,14 @@
 
 .button-green {
     background-color: green !important;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.button-blue {
+    background-color: #4267B2 !important;
     color: white;
     border: none;
     padding: 10px 20px;
