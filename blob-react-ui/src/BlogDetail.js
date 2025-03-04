@@ -4,6 +4,7 @@ import { blobArr } from './blogData';
 import { blogCommentArr } from './blogCommentData';
 import { users } from './userData';
 import './BlogDetail.css';
+// test
 
 function BlogDetail() {
   const { id } = useParams();
