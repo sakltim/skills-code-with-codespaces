@@ -18,10 +18,9 @@ function Login({ onLogin }) {
   useEffect(() => {
     const loggedInUser = localStorage.getItem('username');
     if (loggedInUser) {
-      onLogin(loggedInUser);
-      navigate('/BlogCards');
+      navigate('/');
     }
-  }, [navigate, onLogin]);
+  }, [navigate]);
 
   const isFormValid = username && password;
 
@@ -39,9 +38,9 @@ function Login({ onLogin }) {
         if (user) {
           setUsername('');
           setPassword('');
-          onLogin(username);
+          // onLogin(username);
           localStorage.setItem('username', username);
-          navigate('/BlogCards');
+          navigate('/'); // Change navigation path to blog list page
           console.log('After Navigation');
         } else {
           setLoginButtonText('Invalid Credentials');
