@@ -12,6 +12,7 @@
   padding: 15px;
   border-radius: 8px 8px 0 0;
   border-bottom: 1px solid #365899; /* Darker Facebook blue */
+  word-wrap: break-word;
 }
 
 .blog-detail .title-box h1 {
@@ -24,6 +25,7 @@
   background-color: #f5f6f7; /* Light grey background */
   padding: 20px;
   border-radius: 0 0 8px 8px;
+  word-wrap: break-word;
 }
 
 .blog-detail .description-box p {
@@ -79,6 +81,7 @@
   margin-top: 5px;
   font-size: 1em;
   color: #1c1e21; /* Dark grey text */
+  word-wrap: break-word;
 }
 
 .blog-detail .back-button {
@@ -192,4 +195,17 @@
 
 .modal textarea::placeholder {
   color: #999999; /* Light grey placeholder text */
+}
+
+button, a:hover {
+  cursor: pointer; /* Change mouse icon to hand */
+}
+
+textarea:hover {
+  cursor: text; /* Change mouse icon to I */
+}
+
+/* Ensure the rest of the area keeps the default cursor */
+body {
+  cursor: default;
 }

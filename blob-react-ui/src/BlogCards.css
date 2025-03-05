@@ -31,6 +31,7 @@
     color: #4267B2; /* Facebook blue */
     font-weight: bold;
     transition: color 0.3s ease;
+    word-wrap: break-word;
   }
   
   .blog-card-title:hover {
@@ -40,6 +41,7 @@
   .blog-card-description {
     font-size: 1em;
     color: #1c1e21; /* Dark grey text */
+    word-wrap: break-word;
   }
   .add-blog-button {
     background-color: #007bff;
@@ -87,7 +89,12 @@
   display: block;
   margin-bottom: 10px;
 }
-
+.modal-sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 .popup-content input,
 .popup-content textarea {
   width: 93%;

@@ -5,6 +5,7 @@ import Login from './Login';
 import BlogCards from './BlogCards';
 import MasterPage from './MasterPage';
 import BlogDetail from './BlogDetail';
+import logoutUser from './utils/auth';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,12 +20,27 @@ function App() {
     }
   }, []);
 
-  const handleLogin = (user) => {
-    console.log('handleLogin', user);
-    setUsername(user);
-    setIsLoggedIn(true);
-    localStorage.setItem('username', user);
-  };
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.clear();
+      // Clear user session logic here
+      // For example, you might call a logout function
+      logoutUser();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  // const handleLogin = (user) => {
+  //   console.log('handleLogin', user);
+  //   setUsername(user);
+  //   setIsLoggedIn(true);
+  //   localStorage.setItem('username', user);
+  // };
 
   const handleLogout = () => {
     console.log('handleLogout');
@@ -34,19 +50,30 @@ function App() {
     navigate('/');
   };
 
+  const routeMenus = () => {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<MasterPage username={username} onLogout={handleLogout}><BlogCards /></MasterPage>} />
+        <Route path="/blog" element={<MasterPage username={username} onLogout={handleLogout}><BlogCards /></MasterPage>} />
+        <Route path="/BlogCards" element={<MasterPage username={username} onLogout={handleLogout}><BlogCards /></MasterPage>} />
+        <Route path="/blog/:id" element={<MasterPage username={username} onLogout={handleLogout}><BlogDetail /></MasterPage>} />
+        {/* Add other routes here */}
+      </Routes>
+    );
+  };
+
   return (
+
     <div className="App">
       {isLoggedIn ? (
-        <MasterPage username={username} onLogout={handleLogout}>
-          <Routes>
-            <Route path="/" element={<BlogCards />} />
-            <Route path="/BlogCards" element={<BlogCards />} />
-            <Route path="/blog/:id" element={<BlogDetail />} />
-            {/* Add other routes here */}
-          </Routes>
+        <MasterPage username={username}  onLogout={handleLogout}>
+          {routeMenus()}
         </MasterPage>
       ) : (
-        <Login onLogin={handleLogin} />
+        <div>
+          {routeMenus()}
+        </div>
       )}
     </div>
   );

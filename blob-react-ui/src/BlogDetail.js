@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { blobArr } from './blogData';
 import { blogCommentArr } from './blogCommentData';
@@ -10,26 +10,26 @@ function BlogDetail() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [newComment, setNewComment] = useState('');
-  const [userDetails, setUserDetails] = useState({ firstName: '', lastName: '', username: '' });
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('username');
-    if (!loggedInUser) {
-      navigate('/');
-    } else {
-      const user = users.find(user => user.username === loggedInUser);
-      if (user) {
-        setUserDetails(user);
-      }
-    }
-  }, [navigate]);
-
   const blog = blobArr.find(blog => blog.id === parseInt(id));
-  const comments = blogCommentArr.filter(comment => comment.blogId === parseInt(id));
+  const comments = blogCommentArr
+    .filter(comment => comment.blogId === parseInt(id))
+    .sort((a, b) => new Date(b.submittedTime) - new Date(a.submittedTime)); // Sort comments in descending order
 
   if (!blog) {
-    return <div>Blog not found</div>;
+    alert('Blog not found.');
+    navigate('/blogcards', { replace: true });
+    return null;
   }
+  const userDetails = users.find(user => user.username === blog.username);
+
+  const handleAddCommentClick = () => {
+    const loggedInUser = localStorage.getItem('username');
+    if (!loggedInUser) {
+      navigate('/login');
+    } else {
+      setShowModal(true);
+    }
+  };
 
   const handleAddComment = () => {
     if (newComment.trim() === '') {
@@ -54,6 +54,7 @@ function BlogDetail() {
   };
 
   const handleCloseModal = () => {
+    setNewComment(''); // Clear the comment text area
     setShowModal(false);
   };
 
@@ -78,7 +79,7 @@ function BlogDetail() {
       <div className="comments-section">
         <div className="comments-header">
           <h2>Comments</h2>
-          <button className="add-comment-button" onClick={() => setShowModal(true)}>+</button>
+          <button className="add-comment-button" onClick={handleAddCommentClick}>+</button>
         </div>
         {comments.length > 0 ? (
           comments.map(comment => {
@@ -99,7 +100,7 @@ function BlogDetail() {
           <p>No comments yet, be the first to add a comment.</p>
         )}
       </div>
-      <button className="back-button" onClick={() => navigate('/BlogCards')}>
+      <button className="back-button" onClick={() => navigate('/')}>
         Back to Blog List
       </button>
 
@@ -108,7 +109,6 @@ function BlogDetail() {
           <div className="modal-content">
             <div className="modal-header">
               <h2>Add Comment</h2>
-              {/* <button className="close-button" onClick={handleCloseModal}>×</button> */}
             </div>
             <div className="modal-sub-header">
               <h3>{blog.title}</h3>
@@ -116,6 +116,7 @@ function BlogDetail() {
             </div>
             <textarea
               value={newComment}
+              maxLength={500}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Write your comment here..."
             />
