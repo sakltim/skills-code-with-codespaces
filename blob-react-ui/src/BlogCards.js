@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import './BlogCards.css';
@@ -14,6 +14,7 @@ function BlogCards() {
   const [title, setTitle] = useState('');
   const navigate = useNavigate();
   const [description, setDescription] = useState('');
+  const [showGoToTop, setShowGoToTop] = useState(false);
   // const [userDetails, setUserDetails] = useState({ firstName: '', lastName: '', username: '' });
 
 
@@ -29,6 +30,20 @@ function BlogCards() {
   //   }
   // }, [navigate]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowGoToTop(true);
+      } else {
+        setShowGoToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleAddBlogClick = () => {
     const loggedInUser = localStorage.getItem('username');
@@ -72,20 +87,27 @@ function BlogCards() {
     setShowPopup(false);
   };
 
+  const handleGoToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const sortedBlobArr = [...blobArr].sort((a, b) => new Date(b.submittedTime) - new Date(a.submittedTime));
 
   const blogCards = checkArrayEmpty(sortedBlobArr) ? [] : sortedBlobArr.map((item, pos) => {
+    const truncatedTitle = item.title.length > 50 ? item.title.substring(0, 50) + '...' : item.title;
+    const truncatedDescription = item.description.length > 250 ? item.description.substring(0, 250) + '...' : item.description;
+
     return (
       <Link to={`/blog/${item.id}`} key={item.id} className="blog-card-link">
         <div className="blog-card">
-          <h2 className="blog-card-title">{item.title} (Comments: {getCommentCount(item.id)})</h2>
+          <h2 className="blog-card-title">{truncatedTitle} (Comments: {getCommentCount(item.id)})</h2>
           <div className="blog-card-header">
             <div className="modal-sub-header blog-card-user">
               <p>{userfullName(item.username)}</p>
               <p>{formatDate(item.submittedTime)}</p>
             </div>
           </div>
-          <p className="blog-card-description">{item.description}</p>
+          <p className="blog-card-description">{truncatedDescription}</p>
         </div>
       </Link>
     );
@@ -95,6 +117,11 @@ function BlogCards() {
     <div className="blog-cards-container">
       <button className="add-blog-button" onClick={handleAddBlogClick}>+ Create Blog</button>
       {blogCards}
+      {showGoToTop && (
+        <button className="go-to-top-button" onClick={handleGoToTop}>
+          ↑ Top
+        </button>
+      )}
       {showPopup && (
         <div className="popup">
           <div className="popup-content">

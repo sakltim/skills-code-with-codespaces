@@ -37,3 +37,15 @@
 .logout-button i {
   margin-right: 5px;
 }
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+// Add padding to the main content to avoid overlap with the fixed header
+main {
+  padding-top: 60px; /* Adjust this value based on the header height */
+}
