@@ -4,11 +4,12 @@
     align-items: center;
     padding: 20px;
     background-color: #f5f6f7; /* Light grey background */
+    margin-top: 60px;
   }
   
   .blog-card-link {
     width: 100%;
-    max-width: 600px;
+    max-width: 60%;
     margin-bottom: 20px;
     text-decoration: none;
   }
@@ -119,4 +120,21 @@
 
 .popup-content button:last-of-type {
   background-color: #ccc;
+}
+
+.go-to-top-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.go-to-top-button:hover {
+  background-color: #0056b3;
 }

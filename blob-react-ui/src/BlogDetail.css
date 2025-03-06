@@ -5,6 +5,7 @@
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 60px;
 }
 
 .blog-detail .title-box {
@@ -93,6 +94,9 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
 }
 
 .blog-detail .back-button:hover {
@@ -154,6 +158,7 @@
 
 .modal-sub-header h3 {
   margin: 0;
+  max-width: 60%;
 }
 
 .modal-footer {
@@ -208,4 +213,39 @@ textarea:hover {
 /* Ensure the rest of the area keeps the default cursor */
 body {
   cursor: default;
+}
+
+.top-button {
+  position: fixed;
+  bottom: 50px;
+  right: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.top-button:hover {
+  background-color: #0056b3;
+}
+
+.blog-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f6f7; /* Light grey background */
+  padding: 10px;
+  border-bottom: 1px solid #dddfe2;
+  font-weight: bold;
+}
+
+.blog-info .blog-username {
+  color: #4267B2; /* Facebook blue */
+}
+
+.blog-info .blog-submitted-time {
+  color: #1c1e21; /* Dark grey text */
 }

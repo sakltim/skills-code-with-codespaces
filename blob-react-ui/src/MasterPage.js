@@ -32,7 +32,7 @@ function MasterPage({ onLogout, children }) {
 
   return (
     <div>
-      <header className="header">
+      <header className="header fixed-header">
         {userDetails && userDetails.username ? (
           <div className="header-content">
             <label className="username-label">{`Welcome, ${userDetails.firstName} ${userDetails.lastName} (${userDetails.username})`}</label>

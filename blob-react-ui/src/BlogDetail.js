@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { blobArr } from './blogData';
 import { blogCommentArr } from './blogCommentData';
 import { users } from './userData';
+import formatDate from './utils/Helper';
 import './BlogDetail.css';
 // test
 
@@ -11,17 +12,39 @@ function BlogDetail() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [newComment, setNewComment] = useState('');
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState('');
+  const [showTopButton, setShowTopButton] = useState(false);
   const blog = blobArr.find(blog => blog.id === parseInt(id));
   const comments = blogCommentArr
     .filter(comment => comment.blogId === parseInt(id))
     .sort((a, b) => new Date(b.submittedTime) - new Date(a.submittedTime)); // Sort comments in descending order
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('username');
+    if (loggedInUser) {
+      setLoggedInUserDetails(users.find(user => user.username === loggedInUser));
+    }
+
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [navigate]);
 
   if (!blog) {
     alert('Blog not found.');
     navigate('/blogcards', { replace: true });
     return null;
   }
-  const userDetails = users.find(user => user.username === blog.username);
+  const blogUserDetails = users.find(user => user.username === blog.username);
 
   const handleAddCommentClick = () => {
     const loggedInUser = localStorage.getItem('username');
@@ -41,7 +64,7 @@ function BlogDetail() {
     const newCommentObj = {
       id: blogCommentArr.length + 1,
       blogId: blog.id,
-      username: userDetails.username,
+      username: loggedInUserDetails.username,
       submittedTime: new Date().toISOString(),
       comment: newComment
     };
@@ -59,20 +82,18 @@ function BlogDetail() {
     setShowModal(false);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  const handleGoToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="blog-detail">
       <div className="title-box">
         <h1>{blog.title}</h1>
+      </div>
+      <div className="blog-info">
+        <span className="blog-username">{`${blogUserDetails.firstName} ${blogUserDetails.lastName} (${blogUserDetails.username})`}</span>
+        <span className="blog-submitted-time">{`Submitted on: ${formatDate(blog.submittedTime)}`}</span>
       </div>
       <div className="description-box">
         <p>{blog.description}</p>
@@ -104,6 +125,11 @@ function BlogDetail() {
       <button className="back-button" onClick={() => navigate('/')}>
         Back to Blog List
       </button>
+      {showTopButton && (
+        <button className="top-button" onClick={handleGoToTop}>
+          ↑ Top
+        </button>
+      )}
 
       {showModal && (
         <div className="modal">
@@ -112,8 +138,8 @@ function BlogDetail() {
               <h2>Add Comment</h2>
             </div>
             <div className="modal-sub-header">
-              <h3>{blog.title}</h3>
-              <span>{`${userDetails.firstName} ${userDetails.lastName} (${userDetails.username})`}</span>
+              <h3>{blog.title.length > 27 ? `${blog.title.substring(0, 27)}...` : blog.title}</h3>
+              <span>{`${loggedInUserDetails.firstName} ${loggedInUserDetails.lastName} (${loggedInUserDetails.username})`}</span>
             </div>
             <textarea
               value={newComment}
