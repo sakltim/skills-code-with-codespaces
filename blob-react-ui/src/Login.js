@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import classes from './Login.module.css';
 import { users } from './userData';
 
@@ -63,7 +63,7 @@ function Login({ onLogin }) {
   return (
     <div className={classes['login-container']}>
       <div className={classes['login-box']}>
-        <h2 className={classes['login-header']}>Login Page</h2>
+        <h2 className={classes['login-header']}>Login</h2>
         <form className={classes['login-form']}>
           <div>
             <label>Username:</label>
@@ -89,6 +89,7 @@ function Login({ onLogin }) {
             </button>
           )}
         </form>
+        <Link to="/register" style={{ marginTop: '10px', display: 'block' }}>Register</Link>
       </div>
     </div>
   );
