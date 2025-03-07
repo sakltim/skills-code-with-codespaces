@@ -6,6 +6,7 @@ import BlogCards from './BlogCards';
 import MasterPage from './MasterPage';
 import BlogDetail from './BlogDetail';
 import logoutUser from './utils/auth';
+import RegisterPage from './RegisterPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,6 +59,7 @@ function App() {
         <Route path="/blog" element={<MasterPage username={username} onLogout={handleLogout}><BlogCards /></MasterPage>} />
         <Route path="/BlogCards" element={<MasterPage username={username} onLogout={handleLogout}><BlogCards /></MasterPage>} />
         <Route path="/blog/:id" element={<MasterPage username={username} onLogout={handleLogout}><BlogDetail /></MasterPage>} />
+        <Route path="/register" element={<RegisterPage />} />
         {/* Add other routes here */}
       </Routes>
     );
