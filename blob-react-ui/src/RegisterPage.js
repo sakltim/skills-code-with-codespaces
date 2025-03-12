@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
-import { users } from './userData';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useEffect, useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerUser, resetUsernameExists } from './userSlice'; // Import actions from userSlice
 import './Register.css';
 
 function RegisterPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [usernameExists, setUsernameExists] = useState(false); // State to track if username exists
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { username, password, firstName, lastName, usernameExists } = useSelector(state => state.user); // Get state from Redux
+    const [isRegisterButtonClicked, setIsRegisterButtonClicked] = useState(false);
 
-    const navigate = useNavigate(); // Initialize useNavigate
+    const clearAllTextBoxes = useCallback(() => {
+        dispatch({ type: 'user/setUsername', payload: '' });
+        dispatch({ type: 'user/setPassword', payload: '' });
+        dispatch({ type: 'user/setFirstName', payload: '' });
+        dispatch({ type: 'user/setLastName', payload: '' });
+    }, [dispatch]);
+
+    useEffect(() => {
+        // Clear all text boxes when the component mounts
+        clearAllTextBoxes();
+    }, [dispatch, clearAllTextBoxes]);
 
     const handleRegister = () => {
-        const userExists = users.some(user => user.username === username);
-        if (userExists) {
-            setUsernameExists(true);
-            alert(`Username "${username}" already exists!`);
-        } else {
-            users.push({ username, password, firstName, lastName });
-            alert('User registered successfully!');
-            navigate('/login'); // Navigate to login page
-        }
+        dispatch(registerUser({ username, password, firstName, lastName }));
+        setIsRegisterButtonClicked(true);
     };
+
+    useEffect(() => {
+        debugger;
+        if (isRegisterButtonClicked) {
+            if (!usernameExists) {
+                alert(`User "${username}" registered successfully!`);
+                // Clear all text boxes here
+                clearAllTextBoxes();
+                navigate('/login');
+            } else {
+                alert(`Username "${username}" already exists!`);
+            }
+        setIsRegisterButtonClicked(false);
+    }
+    }, [usernameExists, clearAllTextBoxes, navigate, username, isRegisterButtonClicked]);
 
     const isFormValid = username && password && firstName && lastName;
 
@@ -33,25 +51,25 @@ function RegisterPage() {
                 <form onSubmit={e => { e.preventDefault(); handleRegister(); }}>
                     <div>
                         <label>Username:</label>
-                        <input 
-                            type="text" 
-                            value={username} 
-                            onChange={e => { setUsername(e.target.value); setUsernameExists(false); }} 
-                            required 
-                            className={`input-field ${usernameExists ? 'input-error' : ''}`} // Add error class if username exists
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={e => { dispatch(resetUsernameExists()); dispatch({ type: 'user/setUsername', payload: e.target.value }); }}
+                            required
+                            className={`input-field ${usernameExists ? 'input-error' : ''}`}
                         />
                     </div>
                     <div>
                         <label>Password:</label>
-                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required className="input-field" />
+                        <input type="password" value={password} onChange={e => dispatch({ type: 'user/setPassword', payload: e.target.value })} required className="input-field" />
                     </div>
                     <div>
                         <label>First Name:</label>
-                        <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required className="input-field" />
+                        <input type="text" value={firstName} onChange={e => dispatch({ type: 'user/setFirstName', payload: e.target.value })} required className="input-field" />
                     </div>
                     <div>
                         <label>Last Name:</label>
-                        <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} required className="input-field" />
+                        <input type="text" value={lastName} onChange={e => dispatch({ type: 'user/setLastName', payload: e.target.value })} required className="input-field" />
                     </div>
                     {isFormValid && (
                         <button type="submit" className="register-button">Register</button>
