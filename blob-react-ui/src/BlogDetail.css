@@ -249,3 +249,21 @@ body {
 .blog-info .blog-submitted-time {
   color: #1c1e21; /* Dark grey text */
 }
+
+.delete-button {
+  background-color: #f02849; /* Facebook red color */
+  color: white;
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.delete-button:hover {
+  background-color: #d0263f; /* Darker red on hover */
+}

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { blobArr } from './blogData';
+import { blobArr, deleteBlog } from './blogData';
 import { blogCommentArr } from './blogCommentData';
 import { users } from './userData';
 import formatDate from './utils/Helper';
 import './BlogDetail.css';
-// test
+import { FaTrash } from 'react-icons/fa';
 
 function BlogDetail() {
   const { id } = useParams();
@@ -14,7 +14,8 @@ function BlogDetail() {
   const [newComment, setNewComment] = useState('');
   const [loggedInUserDetails, setLoggedInUserDetails] = useState('');
   const [showTopButton, setShowTopButton] = useState(false);
-  const blog = blobArr.find(blog => blog.id === parseInt(id));
+  const [blogs, setBlogs] = useState(blobArr); // State to manage blogs
+  const blog = blogs.find(blog => blog.id === parseInt(id));
   const comments = blogCommentArr
     .filter(comment => comment.blogId === parseInt(id))
     .sort((a, b) => new Date(b.submittedTime) - new Date(a.submittedTime)); // Sort comments in descending order
@@ -40,6 +41,7 @@ function BlogDetail() {
   }, [navigate]);
 
   if (!blog) {
+    debugger;
     alert('Blog not found.');
     navigate('/blogcards', { replace: true });
     return null;
@@ -47,6 +49,7 @@ function BlogDetail() {
   const blogUserDetails = users.find(user => user.username === blog.username);
 
   const handleAddCommentClick = () => {
+    debugger;
     const loggedInUser = localStorage.getItem('username');
     if (!loggedInUser) {
       navigate('/login');
@@ -86,10 +89,22 @@ function BlogDetail() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleDeleteBlog = () => {
+    deleteBlog(blog.id);
+    const updatedBlogs = blogs.filter(b => b.id !== blog.id);
+    setBlogs(updatedBlogs);
+    navigate('/blogcards', { replace: true });
+  };
+
   return (
     <div className="blog-detail">
-      <div className="title-box">
+      <div className="title-box" style={{ position: 'relative' }}>
         <h1>{blog.title}</h1>
+        {loggedInUserDetails.username === blog.username && (
+          <button className="delete-button" onClick={handleDeleteBlog}>
+            <FaTrash /> Delete
+          </button>
+        )}
       </div>
       <div className="blog-info">
         <span className="blog-username">{`${blogUserDetails.firstName} ${blogUserDetails.lastName} (${blogUserDetails.username})`}</span>
