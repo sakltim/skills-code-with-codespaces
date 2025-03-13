@@ -5,7 +5,7 @@ import { blogCommentArr } from './blogCommentData';
 import { users } from './userData';
 import formatDate from './utils/Helper';
 import './BlogDetail.css';
-import { FaTrash } from 'react-icons/fa'; // Import delete icon
+import { FaTrash } from 'react-icons/fa';
 
 function BlogDetail() {
   const { id } = useParams();
