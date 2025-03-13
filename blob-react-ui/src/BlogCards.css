@@ -61,6 +61,15 @@
     top: 50px;
   }
 
+.delete-blog-button {
+  background-color: red;
+  border: none;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .popup {
   position: fixed;
   top: 0;

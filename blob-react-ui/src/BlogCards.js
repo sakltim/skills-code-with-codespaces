@@ -4,10 +4,11 @@ import './App.css';
 import './BlogCards.css';
 import { isArrayEmpty as checkArrayEmpty } from './Utils';
 import { Link } from 'react-router-dom';
-import { blobArr, addBlog } from './blogData';
+import { blobArr, deleteBlog } from './blogData';
 import { users } from './userData';
 import formatDate from './utils/Helper';
 import { blogCommentArr } from './blogCommentData';
+import { FaTrash } from 'react-icons/fa'; // Import delete icon
 
 function BlogCards() {
   const [showPopup, setShowPopup] = useState(false);
@@ -15,20 +16,8 @@ function BlogCards() {
   const navigate = useNavigate();
   const [description, setDescription] = useState('');
   const [showGoToTop, setShowGoToTop] = useState(false);
-  // const [userDetails, setUserDetails] = useState({ firstName: '', lastName: '', username: '' });
-
-
-  // useEffect(() => {
-  //   const loggedInUser = localStorage.getItem('username');
-  //   if (!loggedInUser) {
-  //     navigate('/login');
-  //   } else {
-  //     const user = users.find(user => user.username === loggedInUser);
-  //     if (user) {
-  //       setUserDetails(user);
-  //     }
-  //   }
-  // }, [navigate]);
+  const loggedInUser = localStorage.getItem('username'); // Remove setLoggedInUser
+  const [blogs, setBlogs] = useState(blobArr); // State to manage blogs
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +35,6 @@ function BlogCards() {
   }, []);
 
   const handleAddBlogClick = () => {
-    const loggedInUser = localStorage.getItem('username');
     if (!loggedInUser) {
       navigate('/login');
     } else {
@@ -54,10 +42,8 @@ function BlogCards() {
     }
   };
 
-
   const userfullName = (username) => {
     const user = users.find(user => user.username === username);
-    // const fullName = user ? `${user.firstName} ${user.lastName}` : username;
     return user ? `${user.firstName} ${user.lastName}` : username;
   };
 
@@ -79,19 +65,25 @@ function BlogCards() {
     }
     const newId = Date.now(); // Generate a unique ID based on the current timestamp
     const submittedTime = new Date().toISOString(); // Get the current date and time
-    const loggedInUser = localStorage.getItem('username');
     const user = users.find(user => user.username === loggedInUser);
-    addBlog(newId, title, description, user.username, submittedTime);
+    // addBlog(newId, title, description, user.username, submittedTime);
+    setBlogs([...blogs, { id: newId, title, description, username: user.username, submittedTime }]); // Update state
     setTitle('');
     setDescription('');
     setShowPopup(false);
+  };
+
+  const handleDeleteBlog = (e, blogId) => {
+    e.preventDefault(); // Prevent navigation
+    deleteBlog(blogId);
+    setBlogs(blogs.filter(blog => blog.id !== blogId)); // Update state to remove the blog
   };
 
   const handleGoToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const sortedBlobArr = [...blobArr].sort((a, b) => new Date(b.submittedTime) - new Date(a.submittedTime));
+  const sortedBlobArr = [...blogs].sort((a, b) => new Date(b.submittedTime) - new Date(a.submittedTime));
 
   const blogCards = checkArrayEmpty(sortedBlobArr) ? [] : sortedBlobArr.map((item, pos) => {
     const truncatedTitle = item.title.length > 50 ? item.title.substring(0, 50) + '...' : item.title;
@@ -105,6 +97,11 @@ function BlogCards() {
             <div className="modal-sub-header blog-card-user">
               <p>{userfullName(item.username)}</p>
               <p>{formatDate(item.submittedTime)}</p>
+              {loggedInUser === item.username && (
+                <button className="delete-blog-button" onClick={(e) => handleDeleteBlog(e, item.id)}>
+                  <FaTrash />
+                </button>
+              )}
             </div>
           </div>
           <p className="blog-card-description">{truncatedDescription}</p>

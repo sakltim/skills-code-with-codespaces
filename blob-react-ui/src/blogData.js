@@ -60,3 +60,10 @@ export const blobArr = [
 export function addBlog(id, title, description,username,submittedTime) {
     blobArr.push({ id, title, description ,username,submittedTime});
 }
+
+export const deleteBlog = (blogId) => {
+  const blogIndex = blobArr.findIndex(blog => blog.id === blogId);
+  if (blogIndex !== -1) {
+    blobArr.splice(blogIndex, 1);
+  }
+};
